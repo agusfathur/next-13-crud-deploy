@@ -20,17 +20,20 @@ const UpdateProduct = ({
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [brand, setBrand] = useState(product.brandId);
+  const [isLoading, setIsLoading] = useState(false);
   // modal
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const handleUpdate = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     await axios.patch(`/api/products/${product.id}`, {
       title: title,
       price: Number(price),
       brandId: Number(brand),
     });
+    setIsLoading(false);
     router.refresh();
     setIsOpen(false);
   };
@@ -94,9 +97,13 @@ const UpdateProduct = ({
               >
                 Close
               </button>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
+              {!isLoading ? (
+                <button type="submit" className="btn btn-primary">
+                  Save
+                </button>
+              ) : (
+                <button className="btn loading"></button>
+              )}
             </div>
           </form>
         </div>

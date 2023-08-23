@@ -8,17 +8,20 @@ const AddProduct = ({ brands }: { brands: Brand[] }) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   // modal
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     await axios.post("/api/products", {
       title: title,
       price: Number(price),
       brandId: Number(brand),
     });
+    setIsLoading(false);
     setTitle("");
     setPrice("");
     setBrand("");
@@ -88,9 +91,13 @@ const AddProduct = ({ brands }: { brands: Brand[] }) => {
               >
                 Close
               </button>
-              <button type="submit" className="btn btn-primary">
-                Save
-              </button>
+              {!isLoading ? (
+                <button type="submit" className="btn btn-primary">
+                  Save
+                </button>
+              ) : (
+                <button disabled className="btn loading"></button>
+              )}
             </div>
           </form>
         </div>

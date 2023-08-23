@@ -5,6 +5,9 @@ import DeleteProduct from "./deleteProduct";
 import UpdateProduct from "./updateProduct";
 const prisma = new PrismaClient();
 
+// agar data saat ter deploy di vercel dynamic
+export const dynamic = "force-dynamic";
+
 const getProducts = async () => {
   const res = await prisma.product.findMany({
     select: {
@@ -24,9 +27,7 @@ const getBrands = async () => {
 };
 
 const Products = async () => {
-  // const [products, brands] = await Promise.all([getProducts(), getBrands()]);
-  const products = await getProducts();
-  const brands = await getBrands();
+  const [products, brands] = await Promise.all([getProducts(), getBrands()]);
 
   return (
     <div>

@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// relasi One To Many
+model Brand {
+  id      Int       @id @default(autoincrement())
+  name    String
+  // field relasi
+  Product Product[]
+}
+
+// relasi One To One
+model Product {
+  id        Int      @id @default(autoincrement())
+  title     String
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // agar relasi bekerja
+  brand     Brand    @relation(fields: [brandId], references: [id])
+  // field relasi
+  brandId   Int
+}
